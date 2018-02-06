@@ -25,12 +25,6 @@ var shuffleArray = function (array) {
   return sortedArray.sort(sorting);
 };
 
-// делаем массив от 1 до AD_COUNT
-var authors = [];
-for (var i = 0; i < AD_COUNT; i++) {
-  authors[i] = i + 1;
-}
-
 // генерация объявления
 var generateAd = function () {
   var ads = [];
@@ -42,18 +36,21 @@ var generateAd = function () {
 
   var getLocation = function (min, max) {
     var location = getRandomNumber(min, max);
-
     return location;
   };
 
-  var avatarNumber = shuffleArray(authors);
-  for (i = 0; i < AD_COUNT; i++) {
-    // получаем случайный неповторяющийся урл
-    var getAuthorAvatar = function () {
-      var authorAvatar = 'img/avatars/user0' + avatarNumber[i] + '.png';
-      return authorAvatar;
-    };
-    // Получаем случайный массив удобств
+  // делаем массив аватаров авторов
+  var authorsAvatars = [];
+  var getRandomAuthor = function () {
+    for (var i = 1; i <= AD_COUNT; i++) {
+      authorsAvatars.push('img/avatars/user0' + i + '.png');
+    }
+    authorsAvatars = shuffleArray(authorsAvatars);
+    return authorsAvatars;
+  };
+  getRandomAuthor();
+
+  for (var i = 0; i < AD_COUNT; i++) {
     var getFeaturesArray = function (array) {
       var offerFeaturesArray = shuffleArray(array);
       var offerFeatures = offerFeaturesArray.slice(1, getRandomNumber(1, offerFeaturesArray.length));
@@ -66,7 +63,7 @@ var generateAd = function () {
 
     ads[i] = {
       author: {
-        avatar: getAuthorAvatar()
+        avatar: authorsAvatars[i]
       },
       offer: {
         title: offerTitle[i],
@@ -87,9 +84,9 @@ var generateAd = function () {
       }
     };
   }
-
   return ads;
 };
+var ads = generateAd();
 // убираем оверлей
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
@@ -111,11 +108,10 @@ var createButton = function () {
     return adButton;
   };
 
+  var mapPins = document.querySelector('.map__pins');
   var buildAdButtons = function () {
-    var mapPins = document.querySelector('.map__pins');
-    var ads = generateAd();
     var fragment = document.createDocumentFragment();
-    for (i = 0; i < AD_COUNT; i++) {
+    for (var i = 0; i < AD_COUNT; i++) {
       fragment.appendChild(renderAdButton(ads[i]));
     }
     mapPins.appendChild(fragment);
@@ -152,32 +148,21 @@ var renderAdCard = function (ad) {
   setTextContent('.popup__description', ad.offer.description);
 
   // вывод features
+  var popupFeaturesList = adCard.querySelector('.popup__features');
   var checkFeatures = function () {
-    var popupFeaturesList = adCard.querySelector('.popup__features');
-    var popupFeature = popupFeaturesList.querySelectorAll('li');
-
-    for (var j = 0; j < popupFeature.length; j++) {
-      var featureArrayItem = popupFeature[j].className;
-      for (i = 0; i < ad.offer.features.length; i++) {
-        var featureListItem = 'feature feature--' + ad.offer.features[i];
-        if (featureArrayItem !== featureListItem) {
-          popupFeature[j].style.display = 'none';
-        } else {
-          popupFeature[j].style.display = 'inline-block';
-          break;
-        }
-      }
+    popupFeaturesList.innerHTML = '';
+    for (var i = 0; i < ad.offer.features.length; i++) {
+      popupFeaturesList.innerHTML += '<li class="feature feature--' + ad.offer.features[i] + '"></li>';
     }
   };
   checkFeatures();
 
   // вывод photos
+  var picturesList = adCard.querySelector('.popup__pictures');
+  var pictureItemTemplate = picturesList.querySelector('li');
+  var fragmentPictures = document.createDocumentFragment();
   var picturesRender = function () {
-    var picturesList = adCard.querySelector('.popup__pictures');
-    var pictureItemTemplate = picturesList.querySelector('li');
-    var fragmentPictures = document.createDocumentFragment();
-
-    for (i = 0; i < ad.offer.photos.length; i++) {
+    for (var i = 0; i < ad.offer.photos.length; i++) {
       var pictureLi = pictureItemTemplate.cloneNode(true);
 
       pictureLi.querySelector('img').src = ad.offer.photos[i];
@@ -198,7 +183,6 @@ var renderAdCard = function (ad) {
 var buildAdCard = function () {
   var fragmentOffer = document.createDocumentFragment();
   var mapFilters = map.querySelector('.map__filters-container');
-  var ads = generateAd();
 
   fragmentOffer.appendChild(renderAdCard(ads[0]));
   map.insertBefore(fragmentOffer, mapFilters);
