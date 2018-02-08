@@ -95,29 +95,29 @@ var map = document.querySelector('.map');
 var template = document.querySelector('template').content;
 
 // создание маркеров на карте
-var createButton = function () {
-  var button = template.querySelector('.map__pin');
-  var BUTTON_HEIGHT_CORRECTION = -35;
+// var createButton = function () {
+var button = template.querySelector('.map__pin');
+var BUTTON_HEIGHT_CORRECTION = -35;
 
-  var renderAdButton = function (ad) {
-    var adButton = button.cloneNode(true);
-    adButton.style.left = ad.location.x + 'px';
-    adButton.style.top = ad.location.y + BUTTON_HEIGHT_CORRECTION + 'px';
-    adButton.querySelector('img').src = ad.author.avatar;
+var renderAdButton = function (ad) {
+  var adButton = button.cloneNode(true);
+  adButton.style.left = ad.location.x + 'px';
+  adButton.style.top = ad.location.y + BUTTON_HEIGHT_CORRECTION + 'px';
+  adButton.querySelector('img').src = ad.author.avatar;
 
-    return adButton;
-  };
-
-  var mapPins = document.querySelector('.map__pins');
-  var buildAdButtons = function () {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < AD_COUNT; i++) {
-      fragment.appendChild(renderAdButton(ads[i]));
-    }
-    mapPins.appendChild(fragment);
-  };
-  buildAdButtons();
+  return adButton;
 };
+
+var mapPins = document.querySelector('.map__pins');
+var buildAdButtons = function () {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < AD_COUNT; i++) {
+    fragment.appendChild(renderAdButton(ads[i]));
+  }
+  mapPins.appendChild(fragment);
+};
+// buildAdButtons();
+// };
 // createButton();
 
 // создание карточки объявления
@@ -180,21 +180,41 @@ var renderAdCard = function (ad) {
   return adCard;
 };
 
-var buildAdCard = function () {
+var buildAdCard = function (i) {
   var fragmentOffer = document.createDocumentFragment();
   var mapFilters = map.querySelector('.map__filters-container');
 
-  fragmentOffer.appendChild(renderAdCard(ads[0]));
+  fragmentOffer.appendChild(renderAdCard(ads[i]));
   map.insertBefore(fragmentOffer, mapFilters);
 };
-// buildAdCard();
+var destroyAdCard = function () {
+  var oldCards = map.querySelectorAll('.popup');
+  for (var i = 0; i < oldCards.length; i++) {
+    map.removeChild(oldCards[i]);
+  }
+};
+// buildAdCard(0);
 
 
 // "перетаскивание" метки, активация страницы
 var mainPin = map.querySelector('.map__pin--main');
 var setActiveState = function () {
   map.classList.remove('map--faded');
+  buildAdButtons();
+
+  // открывать нужный попап в зависимости от кликнутого маркера
+  var pins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
+  for (var i = 0; i < pins.length; i++) {
+    pins[i].num = i;
+    pins[i].addEventListener('click', function () {
+      destroyAdCard();
+      var index = this.num;
+      buildAdCard(index);
+    });
+  }
+
 };
+// setActiveState();
 mainPin.addEventListener('mouseup', function () {
   setActiveState();
 });
