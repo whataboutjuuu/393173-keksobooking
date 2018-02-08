@@ -87,9 +87,9 @@ var generateAd = function () {
   return ads;
 };
 var ads = generateAd();
-// убираем оверлей
+// убираем оверлей - удалить позже
 var map = document.querySelector('.map');
-map.classList.remove('map--faded');
+// map.classList.remove('map--faded');
 
 // получаем содержимое шаблона
 var template = document.querySelector('template').content;
@@ -118,7 +118,7 @@ var createButton = function () {
   };
   buildAdButtons();
 };
-createButton();
+// createButton();
 
 // создание карточки объявления
 var mapCard = template.querySelector('.map__card');
@@ -187,4 +187,14 @@ var buildAdCard = function () {
   fragmentOffer.appendChild(renderAdCard(ads[0]));
   map.insertBefore(fragmentOffer, mapFilters);
 };
-buildAdCard();
+// buildAdCard();
+
+
+// "перетаскивание" метки, активация страницы
+var mainPin = map.querySelector('.map__pin--main');
+var setActiveState = function () {
+  map.classList.remove('map--faded');
+};
+mainPin.addEventListener('mouseup', function () {
+  setActiveState();
+});
