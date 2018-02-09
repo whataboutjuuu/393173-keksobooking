@@ -28,7 +28,6 @@ var shuffleArray = function (array) {
 // генерация объявления
 var generateAd = function () {
   var ads = [];
-
   var offerTitle = shuffleArray(OFFER_TITLES);
   var offerType = shuffleArray(OFFER_TYPES);
   var offerCheckin = shuffleArray(OFFER_CHECKIN);
@@ -86,19 +85,18 @@ var generateAd = function () {
   }
   return ads;
 };
+
 var ads = generateAd();
-// убираем оверлей - удалить позже
 var map = document.querySelector('.map');
-// map.classList.remove('map--faded');
 
 // получаем содержимое шаблона
 var template = document.querySelector('template').content;
-
-// создание маркеров на карте
-// var createButton = function () {
 var button = template.querySelector('.map__pin');
+var mapPins = document.querySelector('.map__pins');
+var mapCard = template.querySelector('.map__card');
 var BUTTON_HEIGHT_CORRECTION = -35;
 
+// создание маркеров на карте
 var renderAdButton = function (ad) {
   var adButton = button.cloneNode(true);
   adButton.style.left = ad.location.x + 'px';
@@ -108,7 +106,6 @@ var renderAdButton = function (ad) {
   return adButton;
 };
 
-var mapPins = document.querySelector('.map__pins');
 var buildAdButtons = function () {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < AD_COUNT; i++) {
@@ -116,13 +113,8 @@ var buildAdButtons = function () {
   }
   mapPins.appendChild(fragment);
 };
-// buildAdButtons();
-// };
-// createButton();
 
 // создание карточки объявления
-var mapCard = template.querySelector('.map__card');
-
 var renderAdCard = function (ad) {
   var adCard = mapCard.cloneNode(true);
 
@@ -179,6 +171,7 @@ var renderAdCard = function (ad) {
 
   return adCard;
 };
+
 // функция для отображения выбраной карточки
 var buildAdCard = function (i) {
   var fragmentOffer = document.createDocumentFragment();
@@ -187,6 +180,7 @@ var buildAdCard = function (i) {
   fragmentOffer.appendChild(renderAdCard(ads[i]));
   map.insertBefore(fragmentOffer, mapFilters);
 };
+
 // функция для удаления из дерева выбранных ранее карточек
 var destroyAdCard = function () {
   var oldCards = map.querySelectorAll('.popup');
@@ -194,6 +188,7 @@ var destroyAdCard = function () {
     map.removeChild(oldCards[i]);
   }
 };
+
 // блокировка\разблокировка полей формы
 var notice = document.querySelector('.notice');
 var fieldsets = notice.querySelectorAll('fieldset');
@@ -202,7 +197,7 @@ var disableFildset = function (boolean) {
     fieldsets[i].disabled = boolean;
   }
 };
-disableFildset(true);
+
 // функция для получения начальных координат метки и установки их в поле Адрес
 var mainPin = map.querySelector('.map__pin--main');
 var getInitialMainCoordinates = function () {
@@ -211,12 +206,13 @@ var getInitialMainCoordinates = function () {
   var addressInput = notice.querySelector('#address');
   addressInput.value = initialX + ', ' + initialY;
 };
-getInitialMainCoordinates();
+
 // функция для получения новых координат, на которые указывает конец метки и установки их в поле Адрес
 var setMainCoordinates = function () {
   var addressInput = notice.querySelector('#address');
   addressInput.value = mainPin.offsetLeft + ', ' + (mainPin.offsetTop + mainPin.offsetHeight);
 };
+
 // "перетаскивание" метки, активация страницы
 var setActiveState = function () {
   map.classList.remove('map--faded');
@@ -233,6 +229,9 @@ var setActiveState = function () {
     });
   }
 };
+
+disableFildset(true);
+getInitialMainCoordinates();
 // по событию mouseup задаем активный статус страницы и новые координаты в поле Адрес
 mainPin.addEventListener('mouseup', function () {
   setActiveState();
