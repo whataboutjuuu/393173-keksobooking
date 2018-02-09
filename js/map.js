@@ -179,7 +179,7 @@ var renderAdCard = function (ad) {
 
   return adCard;
 };
-
+// функция для отображения выбраной карточки
 var buildAdCard = function (i) {
   var fragmentOffer = document.createDocumentFragment();
   var mapFilters = map.querySelector('.map__filters-container');
@@ -187,34 +187,55 @@ var buildAdCard = function (i) {
   fragmentOffer.appendChild(renderAdCard(ads[i]));
   map.insertBefore(fragmentOffer, mapFilters);
 };
+// функция для удаления из дерева выбранных ранее карточек
 var destroyAdCard = function () {
   var oldCards = map.querySelectorAll('.popup');
   for (var i = 0; i < oldCards.length; i++) {
     map.removeChild(oldCards[i]);
   }
 };
-// buildAdCard(0);
-
-
-// "перетаскивание" метки, активация страницы
+// блокировка\разблокировка полей формы
+var notice = document.querySelector('.notice');
+var fieldsets = notice.querySelectorAll('fieldset');
+var disableFildset = function (boolean) {
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = boolean;
+  }
+};
+disableFildset(true);
+// функция для получения начальных координат метки и установки их в поле Адрес
 var mainPin = map.querySelector('.map__pin--main');
+var getInitialMainCoordinates = function () {
+  var initialX = map.offsetWidth / 2;
+  var initialY = mainPin.offsetTop + mainPin.offsetHeight / 2;
+  var addressInput = notice.querySelector('#address');
+  addressInput.value = initialX + ', ' + initialY;
+};
+getInitialMainCoordinates();
+// функция для получения новых координат, на которые указывает конец метки и установки их в поле Адрес
+var setMainCoordinates = function () {
+  var addressInput = notice.querySelector('#address');
+  addressInput.value = mainPin.offsetLeft + ', ' + (mainPin.offsetTop + mainPin.offsetHeight);
+};
+// "перетаскивание" метки, активация страницы
 var setActiveState = function () {
   map.classList.remove('map--faded');
+  notice.querySelector('.notice__form').classList.remove('notice__form--disabled');
   buildAdButtons();
-
   // открывать нужный попап в зависимости от кликнутого маркера
   var pins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
   for (var i = 0; i < pins.length; i++) {
-    pins[i].num = i;
-    pins[i].addEventListener('click', function () {
+    pins[i].number = i;
+    pins[i].addEventListener('click', function (evt) {
       destroyAdCard();
-      var index = this.num;
+      var index = evt.currentTarget.number;
       buildAdCard(index);
     });
   }
-
 };
-// setActiveState();
+// по событию mouseup задаем активный статус страницы и новые координаты в поле Адрес
 mainPin.addEventListener('mouseup', function () {
   setActiveState();
+  disableFildset(false);
+  setMainCoordinates();
 });
