@@ -28,7 +28,6 @@ var shuffleArray = function (array) {
 // генерация объявления
 var generateAd = function () {
   var ads = [];
-
   var offerTitle = shuffleArray(OFFER_TITLES);
   var offerType = shuffleArray(OFFER_TYPES);
   var offerCheckin = shuffleArray(OFFER_CHECKIN);
@@ -86,43 +85,36 @@ var generateAd = function () {
   }
   return ads;
 };
+
 var ads = generateAd();
-// убираем оверлей
 var map = document.querySelector('.map');
-map.classList.remove('map--faded');
 
 // получаем содержимое шаблона
 var template = document.querySelector('template').content;
+var button = template.querySelector('.map__pin');
+var mapPins = document.querySelector('.map__pins');
+var mapCard = template.querySelector('.map__card');
+var BUTTON_HEIGHT_CORRECTION = -35;
 
 // создание маркеров на карте
-var createButton = function () {
-  var button = template.querySelector('.map__pin');
-  var BUTTON_HEIGHT_CORRECTION = -35;
+var renderAdButton = function (ad) {
+  var adButton = button.cloneNode(true);
+  adButton.style.left = ad.location.x + 'px';
+  adButton.style.top = ad.location.y + BUTTON_HEIGHT_CORRECTION + 'px';
+  adButton.querySelector('img').src = ad.author.avatar;
 
-  var renderAdButton = function (ad) {
-    var adButton = button.cloneNode(true);
-    adButton.style.left = ad.location.x + 'px';
-    adButton.style.top = ad.location.y + BUTTON_HEIGHT_CORRECTION + 'px';
-    adButton.querySelector('img').src = ad.author.avatar;
-
-    return adButton;
-  };
-
-  var mapPins = document.querySelector('.map__pins');
-  var buildAdButtons = function () {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < AD_COUNT; i++) {
-      fragment.appendChild(renderAdButton(ads[i]));
-    }
-    mapPins.appendChild(fragment);
-  };
-  buildAdButtons();
+  return adButton;
 };
-createButton();
+
+var buildAdButtons = function () {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < AD_COUNT; i++) {
+    fragment.appendChild(renderAdButton(ads[i]));
+  }
+  mapPins.appendChild(fragment);
+};
 
 // создание карточки объявления
-var mapCard = template.querySelector('.map__card');
-
 var renderAdCard = function (ad) {
   var adCard = mapCard.cloneNode(true);
 
@@ -180,11 +172,69 @@ var renderAdCard = function (ad) {
   return adCard;
 };
 
-var buildAdCard = function () {
+// функция для отображения выбраной карточки
+var buildAdCard = function (i) {
   var fragmentOffer = document.createDocumentFragment();
   var mapFilters = map.querySelector('.map__filters-container');
 
-  fragmentOffer.appendChild(renderAdCard(ads[0]));
+  fragmentOffer.appendChild(renderAdCard(ads[i]));
   map.insertBefore(fragmentOffer, mapFilters);
 };
-buildAdCard();
+
+// функция для удаления из дерева выбранных ранее карточек
+var destroyAdCard = function () {
+  var oldCards = map.querySelectorAll('.popup');
+  for (var i = 0; i < oldCards.length; i++) {
+    map.removeChild(oldCards[i]);
+  }
+};
+
+// блокировка\разблокировка полей формы
+var notice = document.querySelector('.notice');
+var fieldsets = notice.querySelectorAll('fieldset');
+var disableFildset = function (boolean) {
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = boolean;
+  }
+};
+
+// функция для получения начальных координат метки и установки их в поле Адрес
+var mainPin = map.querySelector('.map__pin--main');
+var getInitialMainCoordinates = function () {
+  var initialX = map.offsetWidth / 2;
+  var initialY = mainPin.offsetTop + mainPin.offsetHeight / 2;
+  var addressInput = notice.querySelector('#address');
+  addressInput.value = initialX + ', ' + initialY;
+};
+
+// функция для получения новых координат, на которые указывает конец метки и установки их в поле Адрес
+var setMainCoordinates = function () {
+  var addressInput = notice.querySelector('#address');
+  addressInput.value = mainPin.offsetLeft + ', ' + (mainPin.offsetTop + mainPin.offsetHeight);
+};
+
+// "перетаскивание" метки, активация страницы
+var setActiveState = function () {
+  map.classList.remove('map--faded');
+  notice.querySelector('.notice__form').classList.remove('notice__form--disabled');
+  buildAdButtons();
+  // открывать нужный попап в зависимости от кликнутого маркера
+  var pins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
+  for (var i = 0; i < pins.length; i++) {
+    pins[i].number = i;
+    pins[i].addEventListener('click', function (evt) {
+      destroyAdCard();
+      var index = evt.currentTarget.number;
+      buildAdCard(index);
+    });
+  }
+};
+
+disableFildset(true);
+getInitialMainCoordinates();
+// по событию mouseup задаем активный статус страницы и новые координаты в поле Адрес
+mainPin.addEventListener('mouseup', function () {
+  setActiveState();
+  disableFildset(false);
+  setMainCoordinates();
+});
