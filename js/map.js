@@ -5,6 +5,10 @@
   var mainPin = map.querySelector('.map__pin--main');
   var notice = document.querySelector('.notice');
   var addressInput = notice.querySelector('#address');
+  var PIN_HEIGHT = 22;
+  var MIN_Y_COORD = 150;
+  var MAX_Y_COORD = 500;
+  var mapIsActive = false;
 
   // функция для отображения выбраной карточки
   var buildAdCard = function (i) {
@@ -22,18 +26,11 @@
     }
   };
 
-  // получение начальных координат метки
-  var getInitialMainCoordinates = function () {
-    var initialX = map.offsetWidth / 2;
-    var initialY = mainPin.offsetTop + mainPin.offsetHeight / 2;
-    addressInput.value = initialX + ', ' + initialY;
+  var setCoordsInput = function (x, y) {
+    addressInput.value = x + ', ' + y;
   };
-  getInitialMainCoordinates();
-
-  // запись начальных координат метки в поле формы
-  var setMainCoordinates = function () {
-    addressInput.value = mainPin.offsetLeft + ', ' + (mainPin.offsetTop + mainPin.offsetHeight);
-  };
+  // запись начальных координат метки в поле адреса
+  setCoordsInput(map.offsetWidth / 2, mainPin.offsetTop + mainPin.offsetHeight / 2);
 
   // "перетаскивание" метки, активация страницы
   var setActiveState = function () {
@@ -52,11 +49,63 @@
     }
   };
 
-  // по событию mouseup задаем активный статус страницы и новые координаты в поле Адрес
-  mainPin.addEventListener('mouseup', function () {
-    setActiveState();
-    window.disableFildset(false);
-    setMainCoordinates();
+  mainPin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+
+      // проверка границ
+      var coordX = (mainPin.offsetLeft - shift.x);
+      var coordY = (mainPin.offsetTop - shift.y);
+
+      if (coordX < mainPin.offsetWidth / 2) {
+        coordX = mainPin.offsetWidth / 2;
+      }
+      if (coordX > map.offsetWidth - mainPin.offsetWidth / 2) {
+        coordX = map.offsetWidth - mainPin.offsetWidth / 2;
+      }
+      if (coordY < MIN_Y_COORD) {
+        coordY = MIN_Y_COORD;
+      }
+      if (coordY > MAX_Y_COORD) {
+        coordY = MAX_Y_COORD;
+      }
+
+      mainPin.style.top = coordY + 'px';
+      mainPin.style.left = coordX + 'px';
+      setCoordsInput(coordX, coordY + PIN_HEIGHT + mainPin.offsetHeight / 2);
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+      if (!mapIsActive) {
+        setActiveState();
+        mapIsActive = true;
+      }
+      window.disableFildset(false);
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
   });
 
 })();
