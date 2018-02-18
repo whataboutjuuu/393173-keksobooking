@@ -74,18 +74,10 @@
       var coordX = (mainPin.offsetLeft - shift.x);
       var coordY = (mainPin.offsetTop - shift.y);
 
-      if (coordX < mainPin.offsetWidth / 2) {
-        coordX = mainPin.offsetWidth / 2;
-      }
-      if (coordX > map.offsetWidth - mainPin.offsetWidth / 2) {
-        coordX = map.offsetWidth - mainPin.offsetWidth / 2;
-      }
-      if (coordY < MIN_Y_COORD) {
-        coordY = MIN_Y_COORD;
-      }
-      if (coordY > MAX_Y_COORD) {
-        coordY = MAX_Y_COORD;
-      }
+      coordX = Math.max(coordX, mainPin.offsetWidth / 2);
+      coordY = Math.max(coordY, MIN_Y_COORD);
+      coordX = Math.min(coordX, map.offsetWidth - mainPin.offsetWidth / 2);
+      coordY = Math.min(coordY, MAX_Y_COORD);
 
       mainPin.style.top = coordY + 'px';
       mainPin.style.left = coordX + 'px';
