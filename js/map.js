@@ -11,6 +11,10 @@
   var PIN_HEIGHT = 22;
   var MIN_Y_COORD = 150;
   var MAX_Y_COORD = 500;
+  var Edges = {
+    MIN: 150,
+    MAX: 500
+  };
   var mapIsActive = false;
 
   // создание маркеров на карте
@@ -100,9 +104,9 @@
         var coordY = (mainPin.offsetTop - shift.y);
 
         coordX = Math.max(coordX, mainPin.offsetWidth / 2);
-        coordY = Math.max(coordY, MIN_Y_COORD);
+        coordY = Math.max(coordY, Edges.MIN);
         coordX = Math.min(coordX, map.offsetWidth - mainPin.offsetWidth / 2);
-        coordY = Math.min(coordY, MAX_Y_COORD);
+        coordY = Math.min(coordY, Edges.MAX);
 
         mainPin.style.top = coordY + 'px';
         mainPin.style.left = coordX + 'px';
