@@ -4,7 +4,7 @@
   window.utils = {
     // перемешать элементы массива
     shuffleArray: function (array) {
-      var sortedArray = array.slice();
+      var sortedArray = array.slice(0);
       function sorting() {
         return Math.random() - 0.5;
       }

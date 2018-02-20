@@ -9,8 +9,6 @@
   var AD_COUNT = 8;
   var BUTTON_HEIGHT_CORRECTION = -35;
   var PIN_HEIGHT = 22;
-  var MIN_Y_COORD = 150;
-  var MAX_Y_COORD = 500;
   var Edges = {
     MIN: 150,
     MAX: 500
