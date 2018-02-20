@@ -11,6 +11,7 @@
     console.log(inputs);
     for (var i = 0; i < inputs.length; i++) {
       var input = inputs[i];
+      input.checkValidity()
       if (input.style.invalid === true) {
         console.log('TRUE');
         // outline: 2px solid #bf0000;

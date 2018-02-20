@@ -35,27 +35,50 @@
     mapPins.appendChild(fragment);
   };
 
-  // функция для отображения выбраной карточки
-  var buildAdCard = function (i, loadedData) {
-    var fragmentOffer = document.createDocumentFragment();
-    var mapFilters = map.querySelector('.map__filters-container');
-    fragmentOffer.appendChild(window.renderAdCard(loadedData[i]));
-    map.insertBefore(fragmentOffer, mapFilters);
-  };
+  // перенести в отдельній модуль или к генерации карточки(?)
+  // // функция для отображения выбраной карточки
+  // var buildAdCard = function (i, loadedData) {
+  //   var fragmentOffer = document.createDocumentFragment();
+  //   var mapFilters = map.querySelector('.map__filters-container');
+  //   fragmentOffer.appendChild(window.renderAdCard(loadedData[i]));
+  //   map.insertBefore(fragmentOffer, mapFilters);
+  // };
 
-  // функция для удаления из дерева выбранных ранее карточек
-  var destroyAdCard = function () {
-    var oldCards = map.querySelectorAll('.popup');
-    for (var i = 0; i < oldCards.length; i++) {
-      map.removeChild(oldCards[i]);
-    }
-  };
+  // // функция для удаления из дерева выбранных ранее карточек
+  // var destroyAdCard = function () {
+  //   var oldCards = map.querySelectorAll('.popup');
+  //   for (var i = 0; i < oldCards.length; i++) {
+  //     map.removeChild(oldCards[i]);
+  //   }
+  // };
 
   var setCoordsInput = function (x, y) {
     addressInput.value = x + ', ' + y;
   };
   // запись начальных координат метки в поле адреса
   setCoordsInput(map.offsetWidth / 2, mainPin.offsetTop + mainPin.offsetHeight / 2);
+
+  // дезактивация страницы TODO!!!
+  var setDisabledState = function (loadedData) {
+    if (!map.classList.hasClass('map--faded')) {
+      map.classList.add('map--faded');
+    }
+
+    notice.querySelector('.notice__form').classList.remove('notice__form--disabled');
+    buildAdButtons(loadedData);
+    // открывать нужный попап в зависимости от кликнутого маркера
+    var pins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
+    for (var i = 0; i < pins.length; i++) {
+      pins[i].number = i;
+      pins[i].addEventListener('click', function (evt) {
+        window.destroyAdCard();
+        var index = evt.currentTarget.number;
+        window.buildAdCard(index, loadedData);
+      });
+    }
+  };
+  setDisabledState();
+
 
   // "перетаскивание" метки, активация страницы
   var setActiveState = function (loadedData) {
@@ -67,9 +90,9 @@
     for (var i = 0; i < pins.length; i++) {
       pins[i].number = i;
       pins[i].addEventListener('click', function (evt) {
-        destroyAdCard();
+        window.destroyAdCard();
         var index = evt.currentTarget.number;
-        buildAdCard(index, loadedData);
+        window.buildAdCard(index, loadedData);
       });
     }
   };

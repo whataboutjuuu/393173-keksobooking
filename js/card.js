@@ -2,8 +2,10 @@
 (function () {
 
   var PHOTO_WIDTH = 65;
+  var map = document.querySelector('.map');
   var template = document.querySelector('template').content;
   var mapCard = template.querySelector('.map__card');
+  var popupClose = mapCard.querySelector('.popup__close');
 
   // создание карточки объявления
   window.renderAdCard = function (ad) {
@@ -34,8 +36,12 @@
     var popupFeaturesList = adCard.querySelector('.popup__features');
     var checkFeatures = function () {
       popupFeaturesList.innerHTML = '';
-      for (var i = 0; i < ad.offer.features.length; i++) {
-        popupFeaturesList.innerHTML += '<li class="feature feature--' + ad.offer.features[i] + '"></li>';
+      if (ad.offer.features.length > 0) {
+        for (var i = 0; i < ad.offer.features.length; i++) {
+          popupFeaturesList.innerHTML += '<li class="feature feature--' + ad.offer.features[i] + '"></li>';
+        }
+      } else {
+        popupFeaturesList.remove();
       }
     };
     checkFeatures();
@@ -63,5 +69,26 @@
 
     return adCard;
   };
+
+  // функция для отображения выбраной карточки
+  window.buildAdCard = function (i, loadedData) {
+    var fragmentOffer = document.createDocumentFragment();
+    var mapFilters = map.querySelector('.map__filters-container');
+    fragmentOffer.appendChild(window.renderAdCard(loadedData[i]));
+    map.insertBefore(fragmentOffer, mapFilters);
+  };
+
+  // функция для удаления из дерева выбранных ранее карточек
+  window.destroyAdCard = function () {
+    var oldCards = map.querySelectorAll('.popup');
+    for (var i = 0; i < oldCards.length; i++) {
+      map.removeChild(oldCards[i]);
+    }
+  };
+
+  popupClose.addEventListener('click', function () {
+    console.log('click');
+    window.destroyAdCard();
+  });
 
 })();
