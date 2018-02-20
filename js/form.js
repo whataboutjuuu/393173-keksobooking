@@ -2,7 +2,28 @@
 (function () {
 
   var notice = document.querySelector('.notice');
+  var form = notice.querySelector('.notice__form');
+  var inputs = notice.querySelectorAll('[required]');
+
   // Валидация формы создания объявления
+  var validateInputs = function () {
+
+    console.log(inputs);
+    for (var i = 0; i < inputs.length; i++) {
+      var input = inputs[i];
+      if (input.style.invalid === true) {
+        console.log('TRUE');
+        // outline: 2px solid #bf0000;
+      }
+    }
+  };
+  var submitButton = form.querySelector('button[type="submit"]');
+  submitButton.addEventListener('click', function () {
+    console.log('submit');
+    validateInputs();
+
+  });
+
   // тип жилья
   var typeAndPriceObject = {
     bungalo: '0',
@@ -75,6 +96,16 @@
 
   roomInput.addEventListener('change', function () {
     setGuestOptions();
+  });
+
+
+  var setStartInputs = function () {
+    form.reset();
+  };
+
+  form.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(form), setStartInputs, window.errorAlert);
+    evt.preventDefault();
   });
 
 })();
