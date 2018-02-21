@@ -3,26 +3,14 @@
 
   var notice = document.querySelector('.notice');
   var form = notice.querySelector('.notice__form');
-  var inputs = notice.querySelectorAll('[required]');
 
-  // Валидация формы создания объявления
-  var validateInputs = function () {
 
-    console.log(inputs);
-    for (var i = 0; i < inputs.length; i++) {
-      var input = inputs[i];
-      input.checkValidity()
-      if (input.style.invalid === true) {
-        console.log('TRUE');
-        // outline: 2px solid #bf0000;
-      }
-    }
-  };
-  var submitButton = form.querySelector('button[type="submit"]');
-  submitButton.addEventListener('click', function () {
-    console.log('submit');
-    validateInputs();
+  var resetButton = form.querySelector('button[type="reset"]');
 
+  resetButton.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    window.pageActive = false;
+    window.setPageState('disabled');
   });
 
   // тип жилья
@@ -91,7 +79,6 @@
       }
     };
     buildOption();
-
   };
   setGuestOptions();
 
@@ -99,13 +86,12 @@
     setGuestOptions();
   });
 
-
-  var setStartInputs = function () {
-    form.reset();
+  var onSuccess = function () {
+    window.setPageState('disabled');
+    window.pageActive = false;
   };
-
   form.addEventListener('submit', function (evt) {
-    window.backend.save(new FormData(form), setStartInputs, window.errorAlert);
+    window.backend.save(new FormData(form), onSuccess, window.errorAlert);
     evt.preventDefault();
   });
 
