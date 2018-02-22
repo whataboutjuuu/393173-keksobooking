@@ -2,7 +2,17 @@
 (function () {
 
   var notice = document.querySelector('.notice');
-  // Валидация формы создания объявления
+  var form = notice.querySelector('.notice__form');
+
+
+  var resetButton = form.querySelector('button[type="reset"]');
+
+  resetButton.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    window.pageActive = false;
+    window.setPageState('disabled');
+  });
+
   // тип жилья
   var typeAndPriceObject = {
     bungalo: '0',
@@ -69,12 +79,20 @@
       }
     };
     buildOption();
-
   };
   setGuestOptions();
 
   roomInput.addEventListener('change', function () {
     setGuestOptions();
+  });
+
+  var onSuccess = function () {
+    window.setPageState('disabled');
+    window.pageActive = false;
+  };
+  form.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(form), onSuccess, window.errorAlert);
+    evt.preventDefault();
   });
 
 })();
