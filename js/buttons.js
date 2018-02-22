@@ -17,7 +17,8 @@
   };
 
   window.buttons = {
-    buildAdButtons: function (loadedData, count) {
+    buildAdButtons: function (loadedData) {
+      var count = loadedData.length > 5 ? 5 : loadedData.length;
       var fragment = document.createDocumentFragment();
       for (var i = 0; i < count; i++) {
         fragment.appendChild(renderAdButton(loadedData[i]));

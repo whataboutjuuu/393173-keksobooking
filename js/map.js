@@ -8,6 +8,38 @@
     MIN: 150,
     MAX: 500
   };
+  var loadedData = [];
+
+  var getRank = function () {
+    var rank = 0;
+
+
+  };
+  var getFiltered = function () {
+    var filterBox = document.querySelector('.map__filters');
+    var filter = filterBox.querySelectorAll('.map__filter');
+    var commonAds = [];
+
+    console.log(loadedData);
+    for (var i = 0; i < filter.length; i++) {
+      filter[i].addEventListener('change', function (evt) {
+        var filterValue = evt.target.value;
+
+        for (var j = 0; j < loadedData.length; j++) {
+          var dataValue = loadedData[j].offer.rooms;
+          if (filterValue === dataValue) {
+            console.log(filterValue + ' = ' + dataValue);
+            // commonAds.push(loadedData[j]);
+
+          } else {
+            console.log(filterValue + ' != ' + dataValue);
+          }
+        }
+      });
+    }
+
+  };
+
 
   var successHandler = function (response) {
     // при успешной загрузке данных активируется карта и ожидается взаимодействие с пользователем
@@ -48,7 +80,11 @@
         upEvt.preventDefault();
 
         if (!window.pageActive) {
-          window.setPageState('enabled', response);
+          loadedData = response;
+
+          getFiltered();
+
+          window.setPageState('enabled', loadedData);
           window.pageActive = true;
         }
 

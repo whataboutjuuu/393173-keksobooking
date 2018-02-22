@@ -8,7 +8,6 @@
     'X': map.offsetWidth / 2,
     'Y': 375
   };
-  var AD_COUNT = 8;
 
   // установка статуса страницы - активный / неактивный
   window.setPageState = function (state, loadedData) {
@@ -22,7 +21,7 @@
       map.classList.add('map--faded');
       notice.querySelector('.notice__form').classList.add('notice__form--disabled');
     } else {
-      window.buttons.buildAdButtons(loadedData, AD_COUNT);
+      window.buttons.buildAdButtons(loadedData);
       window.card.openCard(loadedData);
       map.classList.remove('map--faded');
       notice.querySelector('.notice__form').classList.remove('notice__form--disabled');
