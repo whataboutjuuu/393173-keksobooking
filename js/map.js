@@ -3,43 +3,12 @@
 
   var map = document.querySelector('.map');
   var mainPin = map.querySelector('.map__pin--main');
+  var form = map.querySelector('.map__filters');
   var PIN_HEIGHT = 22;
   var Edges = {
     MIN: 150,
     MAX: 500
   };
-  var loadedData = [];
-
-  var getRank = function () {
-    var rank = 0;
-
-
-  };
-  var getFiltered = function () {
-    var filterBox = document.querySelector('.map__filters');
-    var filter = filterBox.querySelectorAll('.map__filter');
-    var commonAds = [];
-
-    console.log(loadedData);
-    for (var i = 0; i < filter.length; i++) {
-      filter[i].addEventListener('change', function (evt) {
-        var filterValue = evt.target.value;
-
-        for (var j = 0; j < loadedData.length; j++) {
-          var dataValue = loadedData[j].offer.rooms;
-          if (filterValue === dataValue) {
-            console.log(filterValue + ' = ' + dataValue);
-            // commonAds.push(loadedData[j]);
-
-          } else {
-            console.log(filterValue + ' != ' + dataValue);
-          }
-        }
-      });
-    }
-
-  };
-
 
   var successHandler = function (response) {
     // при успешной загрузке данных активируется карта и ожидается взаимодействие с пользователем
@@ -79,13 +48,29 @@
       var onMouseUp = function (upEvt) {
         upEvt.preventDefault();
 
+        var loadedData = response;
         if (!window.pageActive) {
-          loadedData = response;
-
-          getFiltered();
+          // var commonItemsArray = loadedData;
+          // getFiltered(commonItemsArray);
 
           window.setPageState('enabled', loadedData);
           window.pageActive = true;
+        }
+        if (window.pageActive) {
+          console.log('page active!');
+          if (loadedData) {
+            console.log('data is here');
+            var newData = window.filteredData(loadedData);
+            console.log(newData);
+            window.buttons.removeAdButtons();
+            window.buttons.buildAdButtons(newData);
+            console.log(window.buttons.buildAdButtons(newData));
+          }
+          // window.buttons.removeAdButtons();
+          // window.filteredData(loadedData);
+          // console.log('window.filteredData(loadedData)');
+          // console.log(window.filteredData(loadedData));
+          // window.buttons.buildAdButtons(newData);
         }
 
         document.removeEventListener('mousemove', onMouseMove);

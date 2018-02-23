@@ -16,6 +16,9 @@
     return adButton;
   };
 
+
+
+
   window.buttons = {
     buildAdButtons: function (loadedData) {
       var count = loadedData.length > 5 ? 5 : loadedData.length;
