@@ -49,28 +49,21 @@
         upEvt.preventDefault();
 
         var loadedData = response;
+        var resultArray = response;
         if (!window.pageActive) {
-          // var commonItemsArray = loadedData;
-          // getFiltered(commonItemsArray);
-
           window.setPageState('enabled', loadedData);
           window.pageActive = true;
         }
         if (window.pageActive) {
-          console.log('page active!');
-          if (loadedData) {
-            console.log('data is here');
-            var newData = window.filteredData(loadedData);
-            console.log(newData);
+
+          form.addEventListener('change', function (evtFilter) {
+            var dataNew = window.filteredData(evtFilter.target, resultArray);
             window.buttons.removeAdButtons();
-            window.buttons.buildAdButtons(newData);
-            console.log(window.buttons.buildAdButtons(newData));
-          }
-          // window.buttons.removeAdButtons();
-          // window.filteredData(loadedData);
-          // console.log('window.filteredData(loadedData)');
-          // console.log(window.filteredData(loadedData));
-          // window.buttons.buildAdButtons(newData);
+            window.buttons.buildAdButtons(dataNew);
+            window.card.openCard(dataNew);
+            resultArray = dataNew;
+          });
+
         }
 
         document.removeEventListener('mousemove', onMouseMove);
