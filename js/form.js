@@ -3,14 +3,24 @@
 
   var notice = document.querySelector('.notice');
   var form = notice.querySelector('.notice__form');
-
-
+  var fields = form.querySelectorAll('input[required]');
   var resetButton = form.querySelector('button[type="reset"]');
 
+  // установка неактивности страницы при нажатии на reset
   resetButton.addEventListener('click', function (evt) {
     evt.preventDefault();
     window.pageActive = false;
     window.setPageState('disabled');
+  });
+
+  // красная рамка для невалидных полей
+  fields.forEach(function (field) {
+    field.addEventListener('invalid', function (evtInvalid) {
+      evtInvalid.target.style.outline = '2px solid red';
+    });
+    field.addEventListener('change', function (evtChange) {
+      evtChange.target.style.outline = '';
+    });
   });
 
   // тип жилья
