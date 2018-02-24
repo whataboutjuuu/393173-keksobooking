@@ -17,14 +17,15 @@
   };
 
   window.buttons = {
-    buildAdButtons: function (loadedData, count) {
+    build: function (loadedData) {
+      var count = loadedData.length > 5 ? 5 : loadedData.length;
       var fragment = document.createDocumentFragment();
       for (var i = 0; i < count; i++) {
         fragment.appendChild(renderAdButton(loadedData[i]));
       }
       mapPins.appendChild(fragment);
     },
-    removeAdButtons: function () {
+    remove: function () {
       var pins = mapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
       for (var i = 0; i < pins.length; i++) {
         pins[i].remove();

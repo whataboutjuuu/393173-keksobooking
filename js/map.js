@@ -3,6 +3,7 @@
 
   var map = document.querySelector('.map');
   var mainPin = map.querySelector('.map__pin--main');
+  var form = map.querySelector('.map__filters');
   var PIN_HEIGHT = 22;
   var Edges = {
     MIN: 150,
@@ -47,9 +48,21 @@
       var onMouseUp = function (upEvt) {
         upEvt.preventDefault();
 
+        var loadedData = response;
+        var resultArray = response;
         if (!window.pageActive) {
-          window.setPageState('enabled', response);
+          window.setPageState('enabled', loadedData);
           window.pageActive = true;
+          // перерисовка пинов согласно отфильтрованным данным
+          form.addEventListener('change', function (evtFilter) {
+            if (map.querySelector('.popup')) {
+              map.querySelector('.popup').remove();
+            }
+            resultArray = window.filteredData(evtFilter.target, resultArray);
+            window.buttons.remove();
+            window.debounce(window.buttons.build(resultArray));
+            window.card.open(resultArray);
+          });
         }
 
         document.removeEventListener('mousemove', onMouseMove);
@@ -61,7 +74,7 @@
     });
   };
 
-  // по-умаолчанию страница неактивна
+  // по-умолчанию страница неактивна
   window.setPageState('disabled');
   // получение данных и активация страницы
   window.backend.load(successHandler, window.errorAlert);

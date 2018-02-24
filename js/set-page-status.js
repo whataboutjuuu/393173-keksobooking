@@ -8,13 +8,12 @@
     'X': map.offsetWidth / 2,
     'Y': 375
   };
-  var AD_COUNT = 8;
 
   // установка статуса страницы - активный / неактивный
   window.setPageState = function (state, loadedData) {
     if (state === 'disabled') {
-      window.card.destroyAdCard();
-      window.buttons.removeAdButtons();
+      window.card.destroy();
+      window.buttons.remove();
       form.reset();
       window.mainPin.setCoordsStyle(InitialCoords.X, InitialCoords.Y);
       window.mainPin.setCoordsInput(InitialCoords.X, InitialCoords.Y);
@@ -22,8 +21,8 @@
       map.classList.add('map--faded');
       notice.querySelector('.notice__form').classList.add('notice__form--disabled');
     } else {
-      window.buttons.buildAdButtons(loadedData, AD_COUNT);
-      window.card.openCard(loadedData);
+      window.buttons.build(loadedData);
+      window.card.open(loadedData);
       map.classList.remove('map--faded');
       notice.querySelector('.notice__form').classList.remove('notice__form--disabled');
     }

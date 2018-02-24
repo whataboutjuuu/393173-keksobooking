@@ -25,12 +25,12 @@
 
   window.card = {
     // открытие определенной карточки
-    openCard: function (loadedData) {
+    open: function (loadedData) {
       var pins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
       for (var i = 0; i < pins.length; i++) {
         pins[i].number = i;
         pins[i].addEventListener('click', function (evt) {
-          window.card.destroyAdCard();
+          window.card.destroy();
           var index = evt.currentTarget.number;
           buildAdCard(index, loadedData);
           // закрытие открытой карточки
@@ -43,7 +43,7 @@
       }
     },
     // функция для удаления из дерева выбранных ранее карточек
-    destroyAdCard: function () {
+    destroy: function () {
       var oldCards = map.querySelectorAll('.popup');
       for (var i = 0; i < oldCards.length; i++) {
         map.removeChild(oldCards[i]);

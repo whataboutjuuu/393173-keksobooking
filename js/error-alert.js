@@ -21,7 +21,6 @@
 
   window.errorAlert = function (errorMessage) {
     buildError(errorMessage);
-
   };
 
 })();
