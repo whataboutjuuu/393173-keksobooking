@@ -5,10 +5,23 @@
   var form = notice.querySelector('.notice__form');
   var fields = form.querySelectorAll('input[required]');
   var resetButton = form.querySelector('button[type="reset"]');
+  var inputAvatar = form.querySelector('#avatar');
+  var previewAvatar = form.querySelector('.notice__preview').querySelector('img');
+  var inputPhoto = form.querySelector('#images');
+  var previewPhoto = form.querySelector('.form__photo-container');
+
+  // реализация превью загруженной аватары
+  window.fileUpload.single(inputAvatar, previewAvatar);
+  // загрузка фотографий квартиры
+  window.fileUpload.multiple(inputPhoto, previewPhoto);
 
   // установка неактивности страницы при нажатии на reset
   resetButton.addEventListener('click', function (evt) {
     evt.preventDefault();
+
+    var images = previewPhoto.querySelectorAll('img');
+    window.fileUpload.remove(previewAvatar);
+    window.fileUpload.remove(images);
     window.pageActive = false;
     window.setPageState('disabled');
   });
@@ -97,6 +110,9 @@
   });
 
   var onSuccess = function () {
+    var images = previewPhoto.querySelectorAll('img');
+    window.fileUpload.remove(previewAvatar);
+    window.fileUpload.remove(images);
     window.setPageState('disabled');
     window.pageActive = false;
   };
