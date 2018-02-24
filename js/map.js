@@ -55,15 +55,16 @@
           window.pageActive = true;
         }
         if (window.pageActive) {
-
           form.addEventListener('change', function (evtFilter) {
+            if (map.querySelector('.popup')) {
+              map.querySelector('.popup').remove();
+            }
             var dataNew = window.filteredData(evtFilter.target, resultArray);
             window.buttons.removeAdButtons();
-            window.buttons.buildAdButtons(dataNew);
+            window.debounce(window.buttons.buildAdButtons(dataNew));
             window.card.openCard(dataNew);
             resultArray = dataNew;
           });
-
         }
 
         document.removeEventListener('mousemove', onMouseMove);
@@ -75,7 +76,7 @@
     });
   };
 
-  // по-умаолчанию страница неактивна
+  // по-умолчанию страница неактивна
   window.setPageState('disabled');
   // получение данных и активация страницы
   window.backend.load(successHandler, window.errorAlert);
