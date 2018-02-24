@@ -2,6 +2,7 @@
 (function () {
 
   var PHOTO_WIDTH = 65;
+
   var template = document.querySelector('template').content;
   var mapCard = template.querySelector('.map__card');
 

@@ -1,9 +1,9 @@
 'use strict';
 (function () {
+  var BUTTON_HEIGHT_CORRECTION = -35;
 
   var map = document.querySelector('.map');
   var mapPins = map.querySelector('.map__pins');
-  var BUTTON_HEIGHT_CORRECTION = -35;
 
   var renderAdButton = function (ad) {
     var template = document.querySelector('template').content;

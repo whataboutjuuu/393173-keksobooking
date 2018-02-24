@@ -1,10 +1,11 @@
 'use strict';
 (function () {
 
+  var PIN_HEIGHT = 22;
+
   var map = document.querySelector('.map');
   var mainPin = map.querySelector('.map__pin--main');
   var form = map.querySelector('.map__filters');
-  var PIN_HEIGHT = 22;
   var Edges = {
     MIN: 150,
     MAX: 500
