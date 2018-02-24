@@ -59,11 +59,10 @@
             if (map.querySelector('.popup')) {
               map.querySelector('.popup').remove();
             }
-            var dataNew = window.filteredData(evtFilter.target, resultArray);
+            resultArray = window.filteredData(evtFilter.target, resultArray);
             window.buttons.removeAdButtons();
-            window.debounce(window.buttons.buildAdButtons(dataNew));
-            window.card.openCard(dataNew);
-            resultArray = dataNew;
+            window.debounce(window.buttons.buildAdButtons(resultArray));
+            window.card.openCard(resultArray);
           });
         }
 
