@@ -17,7 +17,7 @@
   };
 
   window.buttons = {
-    buildAdButtons: function (loadedData) {
+    build: function (loadedData) {
       var count = loadedData.length > 5 ? 5 : loadedData.length;
       var fragment = document.createDocumentFragment();
       for (var i = 0; i < count; i++) {
@@ -25,7 +25,7 @@
       }
       mapPins.appendChild(fragment);
     },
-    removeAdButtons: function () {
+    remove: function () {
       var pins = mapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
       for (var i = 0; i < pins.length; i++) {
         pins[i].remove();

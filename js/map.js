@@ -53,16 +53,15 @@
         if (!window.pageActive) {
           window.setPageState('enabled', loadedData);
           window.pageActive = true;
-        }
-        if (window.pageActive) {
+          // перерисовка пинов согласно отфильтрованным данным
           form.addEventListener('change', function (evtFilter) {
             if (map.querySelector('.popup')) {
               map.querySelector('.popup').remove();
             }
             resultArray = window.filteredData(evtFilter.target, resultArray);
-            window.buttons.removeAdButtons();
-            window.debounce(window.buttons.buildAdButtons(resultArray));
-            window.card.openCard(resultArray);
+            window.buttons.remove();
+            window.debounce(window.buttons.build(resultArray));
+            window.card.open(resultArray);
           });
         }
 
