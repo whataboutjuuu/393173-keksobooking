@@ -2,6 +2,7 @@
 (function () {
 
   var PIN_HEIGHT = 22;
+  var DEBOUNCE_INTERVAL = 500;
 
   var map = document.querySelector('.map');
   var mainPin = map.querySelector('.map__pin--main');
@@ -60,9 +61,11 @@
               map.querySelector('.popup').remove();
             }
             resultArray = window.filteredData(evtFilter.target, resultArray);
-            window.buttons.remove();
-            window.debounce(window.buttons.build(resultArray));
-            window.card.open(resultArray);
+            window.debounce(function () {
+              window.buttons.remove();
+              window.buttons.build(resultArray);
+              window.card.open(resultArray);
+            }, DEBOUNCE_INTERVAL);
           });
         }
 

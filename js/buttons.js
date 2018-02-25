@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+
   var BUTTON_HEIGHT_CORRECTION = -35;
 
   var map = document.querySelector('.map');

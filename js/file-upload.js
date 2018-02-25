@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+
   var FILE_TYPES = ['jpeg', 'jpg', 'png'];
 
   var createPreviewPhoto = function (src, target) {
@@ -22,7 +23,7 @@
       evt.dataTransfer.dropEffect = 'move';
 
       var target = evt.target;
-      if (target !== draggedImage && target !== dropContainer) {
+      if (target !== dropContainer) {
         dropContainer.insertBefore(draggedImage, dropContainer.children[0] !== target && target.nextSibling || target);
       }
     };
@@ -66,9 +67,10 @@
     },
     multiple: function (input, preview) {
       var container = document.createElement('div');
-      container.style.outline = '2px dashed #c7c7c7';
+      container.style.outline = '1px dashed #c7c7c7';
       container.style.width = '480px';
-      container.style.height = '160px';
+      container.style.height = '140px';
+      container.style.marginTop = '20px';
       container.classList.add('drop-container');
       preview.appendChild(container);
 
@@ -98,7 +100,6 @@
       } else {
         images.src = 'img/muffin.png';
       }
-
     }
   };
 

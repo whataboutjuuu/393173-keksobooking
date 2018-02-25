@@ -857,6 +857,6 @@ textarea:focus
     background-position: -10px -10px;
 }
 
-.ghost {
-  opacity: .4;
+.drop-container img {
+  cursor: move;
 }

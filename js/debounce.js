@@ -1,12 +1,20 @@
 'use strict';
 (function () {
-  var DEBOUNCE_INTERVAL = 500;
 
-  var lastTimeout;
-  window.debounce = function (fun) {
-    if (lastTimeout) {
-      window.clearTimeout(lastTimeout);
-    }
-    lastTimeout = window.setTimeout(fun, DEBOUNCE_INTERVAL);
+  window.debounce = function (func, interval) {
+    var timeout;
+
+    var debounced = function () {
+      var later = function () {
+        timeout = null;
+        func();
+      };
+
+      clearTimeout(timeout);
+      timeout = setTimeout(later, interval);
+    };
+
+    return debounced();
   };
+
 })();

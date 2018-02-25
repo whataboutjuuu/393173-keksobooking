@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+
   // блокировка\разблокировка полей формы
   var notice = document.querySelector('.notice');
   var fieldsets = notice.querySelectorAll('fieldset');
@@ -10,4 +11,5 @@
   };
 
   window.disableFildset(true);
+
 })();

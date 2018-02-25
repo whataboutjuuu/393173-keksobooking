@@ -116,6 +116,7 @@
     window.setPageState('disabled');
     window.pageActive = false;
   };
+
   form.addEventListener('submit', function (evt) {
     window.backend.save(new FormData(form), onSuccess, window.errorAlert);
     evt.preventDefault();
