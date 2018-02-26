@@ -13,9 +13,7 @@
 
   // реализация превью загруженной аватары
   // window.file.upload(inputAvatar, previewAvatar);
-
-
-  window.file.upload(inputAvatar, previewAvatar, window.showAvatar(previewAvatar));
+  window.file.upload(inputAvatar, window.showAvatar());
 
   // создание контейнера для фотографий
   var container = document.createElement('div');
@@ -25,9 +23,13 @@
   container.style.marginTop = '20px';
   container.classList.add('drop-container');
   previewPhoto.appendChild(container);
+
   // загрузка фотографий квартиры
   // window.file.upload(inputPhoto, previewPhoto);
-  window.file.upload(inputPhoto, previewPhoto, window.showPhotos(container));
+  window.file.upload(inputPhoto, window.showPhotos(container));
+
+
+
 
   // установка неактивности страницы при нажатии на reset
   resetButton.addEventListener('click', function (evt) {
