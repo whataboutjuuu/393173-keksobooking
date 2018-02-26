@@ -10,18 +10,31 @@
   var inputPhoto = form.querySelector('#images');
   var previewPhoto = form.querySelector('.form__photo-container');
 
+
   // реализация превью загруженной аватары
-  window.fileUpload.single(inputAvatar, previewAvatar);
+  // window.file.upload(inputAvatar, previewAvatar);
+
+  window.file.upload(inputAvatar, previewAvatar, window.showAvatar());
+
+  // создание контейнера для фотографий
+  var container = document.createElement('div');
+  container.style.outline = '1px dashed #c7c7c7';
+  container.style.width = '480px';
+  container.style.height = '140px';
+  container.style.marginTop = '20px';
+  container.classList.add('drop-container');
+  previewPhoto.appendChild(container);
   // загрузка фотографий квартиры
-  window.fileUpload.multiple(inputPhoto, previewPhoto);
+  // window.file.upload(inputPhoto, previewPhoto);
+  window.file.upload(inputPhoto, previewPhoto, window.showPhotos());
 
   // установка неактивности страницы при нажатии на reset
   resetButton.addEventListener('click', function (evt) {
     evt.preventDefault();
 
     var images = previewPhoto.querySelectorAll('img');
-    window.fileUpload.remove(previewAvatar);
-    window.fileUpload.remove(images);
+    window.file.remove(previewAvatar);
+    window.file.remove(images);
     window.pageActive = false;
     window.setPageState('disabled');
   });
@@ -111,8 +124,8 @@
 
   var onSuccess = function () {
     var images = previewPhoto.querySelectorAll('img');
-    window.fileUpload.remove(previewAvatar);
-    window.fileUpload.remove(images);
+    window.file.remove(previewAvatar);
+    window.file.remove(images);
     window.setPageState('disabled');
     window.pageActive = false;
   };

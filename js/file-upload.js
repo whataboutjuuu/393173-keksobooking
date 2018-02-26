@@ -3,7 +3,7 @@
 
   var FILE_TYPES = ['jpeg', 'jpg', 'png'];
 
-  var createPreviewPhoto = function (src, target) {
+  window.createPreviewPhoto = function (src, target) {
     var adImage = document.createElement('img');
     adImage.width = 65;
     adImage.height = 65;
@@ -13,7 +13,7 @@
     target.appendChild(adImage);
   };
 
-  var sortable = function () {
+  window.sortable = function () {
     var dropContainer = document.querySelector('.drop-container');
 
     var draggedImage;
@@ -46,9 +46,16 @@
 
     });
   };
+  window.showAvatar = function (container, reader) {
+    container.src = reader.result;
+  };
+  window.showPhotos = function (container, reader) {
+    window.createPreviewPhoto(reader.result, container);
+    window.sortable();
+  };
 
-  window.fileUpload = {
-    single: function (input, preview) {
+  window.file = {
+    upload: function (input, preview, cb) {
       input.addEventListener('change', function () {
         var file = input.files[0];
         var fileName = file.name.toLowerCase();
@@ -58,34 +65,7 @@
 
         if (matches) {
           var reader = new FileReader();
-          reader.addEventListener('load', function () {
-            preview.src = reader.result;
-          });
-          reader.readAsDataURL(file);
-        }
-      });
-    },
-    multiple: function (input, preview) {
-      var container = document.createElement('div');
-      container.style.outline = '1px dashed #c7c7c7';
-      container.style.width = '480px';
-      container.style.height = '140px';
-      container.style.marginTop = '20px';
-      container.classList.add('drop-container');
-      preview.appendChild(container);
-
-      input.addEventListener('change', function () {
-        var file = input.files[0];
-        var fileName = file.name.toLowerCase();
-        var matches = FILE_TYPES.some(function (it) {
-          return fileName.endsWith(it);
-        });
-        if (matches) {
-          var reader = new FileReader();
-          reader.addEventListener('load', function () {
-            createPreviewPhoto(reader.result, container);
-            sortable();
-          });
+          reader.addEventListener('load', cb(preview, reader));
           reader.readAsDataURL(file);
         }
       });
@@ -102,5 +82,61 @@
       }
     }
   };
+
+  //window.fileUpload = {
+    // single: function (input, preview) {
+    //   input.addEventListener('change', function () {
+    //     var file = input.files[0];
+    //     var fileName = file.name.toLowerCase();
+    //     var matches = FILE_TYPES.some(function (it) {
+    //       return fileName.endsWith(it);
+    //     });
+
+    //     if (matches) {
+    //       var reader = new FileReader();
+    //       reader.addEventListener('load', function () {
+    //         preview.src = reader.result;
+    //       });
+    //       reader.readAsDataURL(file);
+    //     }
+    //   });
+    // },
+    // multiple: function (input, preview) {
+    //   var container = document.createElement('div');
+    //   container.style.outline = '1px dashed #c7c7c7';
+    //   container.style.width = '480px';
+    //   container.style.height = '140px';
+    //   container.style.marginTop = '20px';
+    //   container.classList.add('drop-container');
+    //   preview.appendChild(container);
+
+    //   input.addEventListener('change', function () {
+    //     var file = input.files[0];
+    //     var fileName = file.name.toLowerCase();
+    //     var matches = FILE_TYPES.some(function (it) {
+    //       return fileName.endsWith(it);
+    //     });
+    //     if (matches) {
+    //       var reader = new FileReader();
+    //       reader.addEventListener('load', function () {
+    //         createPreviewPhoto(reader.result, container);
+    //         sortable();
+    //       });
+    //       reader.readAsDataURL(file);
+    //     }
+    //   });
+    // },
+    // remove: function (images) {
+    //   if (images.length > 1) {
+    //     for (var i = 0; i < images.length; i++) {
+    //       if (images[i].tagName.toLowerCase() === 'img') {
+    //         images[i].remove();
+    //       }
+    //     }
+    //   } else {
+    //     images.src = 'img/muffin.png';
+    //   }
+    // }
+  //};
 
 })();
