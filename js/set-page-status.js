@@ -17,7 +17,7 @@
       form.reset();
       window.mainPin.setCoordsStyle(InitialCoords.X, InitialCoords.Y);
       window.mainPin.setCoordsInput(InitialCoords.X, InitialCoords.Y);
-      window.disableFildset(false);
+      window.disableFildsets(true);
       map.classList.add('map--faded');
       notice.querySelector('.notice__form').classList.add('notice__form--disabled');
     } else {
@@ -25,6 +25,7 @@
       window.card.open(loadedData);
       map.classList.remove('map--faded');
       notice.querySelector('.notice__form').classList.remove('notice__form--disabled');
+      window.disableFildsets(false);
     }
   };
 

@@ -2,6 +2,7 @@
 (function () {
 
   var PIN_HEIGHT = 22;
+  var BUTTON_TRANSLATE_Y = 7;
   var DEBOUNCE_INTERVAL = 500;
 
   var map = document.querySelector('.map');
@@ -12,7 +13,7 @@
     MAX: 500
   };
 
-  var successHandler = function (response) {
+  var onSuccess = function (response) {
     // при успешной загрузке данных активируется карта и ожидается взаимодействие с пользователем
     mainPin.addEventListener('mousedown', function (evt) {
       evt.preventDefault();
@@ -39,12 +40,12 @@
         var coordY = (mainPin.offsetTop - shift.y);
 
         coordX = Math.max(coordX, mainPin.offsetWidth / 2);
-        coordY = Math.max(coordY, Edges.MIN);
+        coordY = Math.max(coordY, Edges.MIN - PIN_HEIGHT - mainPin.offsetHeight / 2 + BUTTON_TRANSLATE_Y);
         coordX = Math.min(coordX, map.offsetWidth - mainPin.offsetWidth / 2);
-        coordY = Math.min(coordY, Edges.MAX);
+        coordY = Math.min(coordY, Edges.MAX - PIN_HEIGHT - mainPin.offsetHeight / 2 + BUTTON_TRANSLATE_Y);
 
         window.mainPin.setCoordsStyle(coordX, coordY);
-        window.mainPin.setCoordsInput(coordX, coordY + PIN_HEIGHT + mainPin.offsetHeight / 2);
+        window.mainPin.setCoordsInput(coordX, coordY + PIN_HEIGHT + mainPin.offsetHeight / 2 - BUTTON_TRANSLATE_Y);
       };
 
       var onMouseUp = function (upEvt) {
@@ -60,7 +61,7 @@
             if (map.querySelector('.popup')) {
               map.querySelector('.popup').remove();
             }
-            resultArray = window.filteredData(evtFilter.target, resultArray);
+            resultArray = window.getFilteredData(evtFilter.target, resultArray);
             window.debounce(function () {
               window.buttons.remove();
               window.buttons.build(resultArray);
@@ -81,6 +82,6 @@
   // по-умолчанию страница неактивна
   window.setPageState('disabled');
   // получение данных и активация страницы
-  window.backend.load(successHandler, window.errorAlert);
+  window.backend.load(onSuccess, window.errorAlert);
 
 })();
