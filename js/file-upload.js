@@ -3,11 +3,7 @@
 
   var FILE_TYPES = ['jpeg', 'jpg', 'png'];
 
-  // window.createPreviewPhoto = function (src, target) {
-
-  // };
-
-  var sortable = function () {
+  window.sortable = function () {
     var dropContainer = document.querySelector('.drop-container');
     var draggedImage;
 
@@ -36,37 +32,6 @@
     });
   };
 
-  // window.showAvatar = function (container) {
-  //   var reader = new FileReader();
-  //   container.src = reader.result;
-  // };
-  // window.showPhotos = function (container) {
-  //   var reader = new FileReader();
-  //   var adImage = document.createElement('img');
-  //   adImage.width = 65;
-  //   adImage.height = 65;
-  //   adImage.style.border = '2px solid #f0f0ea';
-  //   adImage.src = reader.result;
-  //   adImage.draggable = true;
-  //   container.appendChild(adImage);
-  //   sortable();
-  // };
-  window.showAvatar = function (result) {
-    var previewAvatar = document.querySelector('.notice__preview').querySelector('img');
-    previewAvatar.src = result;
-  };
-  window.showPhotos = function (result) {
-    var container = document.querySelector('.drop-container');
-    var adImage = document.createElement('img');
-    adImage.width = 65;
-    adImage.height = 65;
-    adImage.style.border = '2px solid #f0f0ea';
-    adImage.src = result;
-    adImage.draggable = true;
-    container.appendChild(adImage);
-    sortable();
-  };
-
   window.file = {
     upload: function (input, callback) {
       input.addEventListener('change', function () {
@@ -78,9 +43,8 @@
 
         if (matches) {
           var reader = new FileReader();
-          var container;
           reader.addEventListener('load', function () {
-            callback(container, reader.result);
+            callback(reader.result);
           });
           reader.readAsDataURL(file);
         }
@@ -98,61 +62,5 @@
       }
     }
   };
-
-  //window.fileUpload = {
-    // single: function (input, preview) {
-    //   input.addEventListener('change', function () {
-    //     var file = input.files[0];
-    //     var fileName = file.name.toLowerCase();
-    //     var matches = FILE_TYPES.some(function (it) {
-    //       return fileName.endsWith(it);
-    //     });
-
-    //     if (matches) {
-    //       var reader = new FileReader();
-    //       reader.addEventListener('load', function () {
-    //         preview.src = reader.result;
-    //       });
-    //       reader.readAsDataURL(file);
-    //     }
-    //   });
-    // },
-    // multiple: function (input, preview) {
-    //   var container = document.createElement('div');
-    //   container.style.outline = '1px dashed #c7c7c7';
-    //   container.style.width = '480px';
-    //   container.style.height = '140px';
-    //   container.style.marginTop = '20px';
-    //   container.classList.add('drop-container');
-    //   preview.appendChild(container);
-
-    //   input.addEventListener('change', function () {
-    //     var file = input.files[0];
-    //     var fileName = file.name.toLowerCase();
-    //     var matches = FILE_TYPES.some(function (it) {
-    //       return fileName.endsWith(it);
-    //     });
-    //     if (matches) {
-    //       var reader = new FileReader();
-    //       reader.addEventListener('load', function () {
-    //         createPreviewPhoto(reader.result, container);
-    //         sortable();
-    //       });
-    //       reader.readAsDataURL(file);
-    //     }
-    //   });
-    // },
-    // remove: function (images) {
-    //   if (images.length > 1) {
-    //     for (var i = 0; i < images.length; i++) {
-    //       if (images[i].tagName.toLowerCase() === 'img') {
-    //         images[i].remove();
-    //       }
-    //     }
-    //   } else {
-    //     images.src = 'img/muffin.png';
-    //   }
-    // }
-  //};
 
 })();

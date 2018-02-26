@@ -10,11 +10,6 @@
   var inputPhoto = form.querySelector('#images');
   var previewPhoto = form.querySelector('.form__photo-container');
 
-
-  // реализация превью загруженной аватары
-  // window.file.upload(inputAvatar, previewAvatar);
-  window.file.upload(inputAvatar, window.showAvatar());
-
   // создание контейнера для фотографий
   var container = document.createElement('div');
   container.style.outline = '1px dashed #c7c7c7';
@@ -24,12 +19,24 @@
   container.classList.add('drop-container');
   previewPhoto.appendChild(container);
 
+  var showAvatar = function (result) {
+    previewAvatar.src = result;
+  };
+  var showPhotos = function (result) {
+    var adImage = document.createElement('img');
+    adImage.width = 65;
+    adImage.height = 65;
+    adImage.style.border = '2px solid #f0f0ea';
+    adImage.src = result;
+    adImage.draggable = true;
+    container.appendChild(adImage);
+    window.sortable();
+  };
+
+  // реализация превью загруженной аватары
+  window.file.upload(inputAvatar, showAvatar);
   // загрузка фотографий квартиры
-  // window.file.upload(inputPhoto, previewPhoto);
-  window.file.upload(inputPhoto, window.showPhotos(container));
-
-
-
+  window.file.upload(inputPhoto, showPhotos);
 
   // установка неактивности страницы при нажатии на reset
   resetButton.addEventListener('click', function (evt) {
