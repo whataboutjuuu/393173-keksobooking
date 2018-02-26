@@ -51,7 +51,7 @@
     picturesList.style.overflow = 'auto';
     var pictureItemTemplate = picturesList.querySelector('li');
     var fragmentPictures = document.createDocumentFragment();
-    var picturesRender = function () {
+    var renderPictures = function () {
       for (var i = 0; i < ad.offer.photos.length; i++) {
         var pictureLi = pictureItemTemplate.cloneNode(true);
 
@@ -64,7 +64,7 @@
       picturesList.replaceChild(fragmentPictures, pictureItemTemplate);
     };
     if (ad.offer.photos.length > 0) {
-      picturesRender();
+      renderPictures();
     } else {
       picturesList.remove();
     }

@@ -13,7 +13,7 @@
     MAX: 500
   };
 
-  var successHandler = function (response) {
+  var onSuccess = function (response) {
     // при успешной загрузке данных активируется карта и ожидается взаимодействие с пользователем
     mainPin.addEventListener('mousedown', function (evt) {
       evt.preventDefault();
@@ -61,7 +61,7 @@
             if (map.querySelector('.popup')) {
               map.querySelector('.popup').remove();
             }
-            resultArray = window.filteredData(evtFilter.target, resultArray);
+            resultArray = window.getFilteredData(evtFilter.target, resultArray);
             window.debounce(function () {
               window.buttons.remove();
               window.buttons.build(resultArray);
@@ -82,6 +82,6 @@
   // по-умолчанию страница неактивна
   window.setPageState('disabled');
   // получение данных и активация страницы
-  window.backend.load(successHandler, window.errorAlert);
+  window.backend.load(onSuccess, window.errorAlert);
 
 })();

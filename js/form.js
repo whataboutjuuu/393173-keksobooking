@@ -30,7 +30,7 @@
     adImage.src = result;
     adImage.draggable = true;
     container.appendChild(adImage);
-    window.sortable();
+    window.sortFiles();
   };
 
   // реализация превью загруженной аватары
@@ -69,15 +69,15 @@
   var typeInput = notice.querySelector('#type');
   var priceInput = notice.querySelector('#price');
 
-  var choosedType = function () {
+  var setMinPrice = function () {
     var typeInputValue = typeInput.value;
     var minValue = typeAndPriceObject[typeInputValue];
     priceInput.setAttribute('min', minValue);
     priceInput.setAttribute('placeholder', minValue);
   };
-  choosedType();
+  setMinPrice();
   typeInput.addEventListener('click', function () {
-    choosedType();
+    setMinPrice();
   });
 
   // синхронизированное время заезда-выезда

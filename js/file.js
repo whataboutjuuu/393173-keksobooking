@@ -3,7 +3,7 @@
 
   var FILE_TYPES = ['jpeg', 'jpg', 'png'];
 
-  window.sortable = function () {
+  window.sortFiles = function () {
     var dropContainer = document.querySelector('.drop-container');
     var draggedImage;
 
