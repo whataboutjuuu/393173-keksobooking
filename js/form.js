@@ -14,7 +14,8 @@
   // реализация превью загруженной аватары
   // window.file.upload(inputAvatar, previewAvatar);
 
-  window.file.upload(inputAvatar, previewAvatar, window.showAvatar());
+
+  window.file.upload(inputAvatar, previewAvatar, window.showAvatar(previewAvatar));
 
   // создание контейнера для фотографий
   var container = document.createElement('div');
@@ -26,7 +27,7 @@
   previewPhoto.appendChild(container);
   // загрузка фотографий квартиры
   // window.file.upload(inputPhoto, previewPhoto);
-  window.file.upload(inputPhoto, previewPhoto, window.showPhotos());
+  window.file.upload(inputPhoto, previewPhoto, window.showPhotos(container));
 
   // установка неактивности страницы при нажатии на reset
   resetButton.addEventListener('click', function (evt) {

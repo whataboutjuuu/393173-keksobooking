@@ -3,25 +3,17 @@
 
   var FILE_TYPES = ['jpeg', 'jpg', 'png'];
 
-  window.createPreviewPhoto = function (src, target) {
-    var adImage = document.createElement('img');
-    adImage.width = 65;
-    adImage.height = 65;
-    adImage.style.border = '2px solid #f0f0ea';
-    adImage.src = src;
-    adImage.draggable = true;
-    target.appendChild(adImage);
-  };
+  // window.createPreviewPhoto = function (src, target) {
 
-  window.sortable = function () {
+  // };
+
+  var sortable = function () {
     var dropContainer = document.querySelector('.drop-container');
-
     var draggedImage;
 
     var onDragOver = function (evt) {
       evt.preventDefault();
       evt.dataTransfer.dropEffect = 'move';
-
       var target = evt.target;
       if (target !== dropContainer) {
         dropContainer.insertBefore(draggedImage, dropContainer.children[0] !== target && target.nextSibling || target);
@@ -30,28 +22,47 @@
 
     var onDragEnd = function (evt) {
       evt.preventDefault();
-
       dropContainer.removeEventListener('dragover', onDragOver, false);
       dropContainer.removeEventListener('dragend', onDragEnd, false);
     };
 
     dropContainer.addEventListener('dragstart', function (evt) {
       draggedImage = evt.target;
-
       evt.dataTransfer.effectAllowed = 'move';
       evt.dataTransfer.setData('text/plain', evt.target.alt);
 
       dropContainer.addEventListener('dragover', onDragOver, false);
       dropContainer.addEventListener('dragend', onDragEnd, false);
-
     });
   };
+
+  // window.showAvatar = function (container) {
+  //   var reader = new FileReader();
+  //   container.src = reader.result;
+  // };
+  // window.showPhotos = function (container) {
+  //   var reader = new FileReader();
+  //   var adImage = document.createElement('img');
+  //   adImage.width = 65;
+  //   adImage.height = 65;
+  //   adImage.style.border = '2px solid #f0f0ea';
+  //   adImage.src = reader.result;
+  //   adImage.draggable = true;
+  //   container.appendChild(adImage);
+  //   sortable();
+  // };
   window.showAvatar = function (container, reader) {
     container.src = reader.result;
   };
   window.showPhotos = function (container, reader) {
-    window.createPreviewPhoto(reader.result, container);
-    window.sortable();
+    var adImage = document.createElement('img');
+    adImage.width = 65;
+    adImage.height = 65;
+    adImage.style.border = '2px solid #f0f0ea';
+    adImage.src = reader.result;
+    adImage.draggable = true;
+    container.appendChild(adImage);
+    sortable();
   };
 
   window.file = {
@@ -65,7 +76,7 @@
 
         if (matches) {
           var reader = new FileReader();
-          reader.addEventListener('load', cb(preview, reader));
+          reader.addEventListener('load', cb);
           reader.readAsDataURL(file);
         }
       });
