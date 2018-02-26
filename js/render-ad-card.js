@@ -2,6 +2,7 @@
 (function () {
 
   var PHOTO_WIDTH = 65;
+
   var template = document.querySelector('template').content;
   var mapCard = template.querySelector('.map__card');
 
@@ -46,6 +47,8 @@
 
     // вывод photos
     var picturesList = adCard.querySelector('.popup__pictures');
+    picturesList.style.maxHeight = '100px';
+    picturesList.style.overflow = 'auto';
     var pictureItemTemplate = picturesList.querySelector('li');
     var fragmentPictures = document.createDocumentFragment();
     var picturesRender = function () {

@@ -27,4 +27,5 @@
       notice.querySelector('.notice__form').classList.remove('notice__form--disabled');
     }
   };
+
 })();

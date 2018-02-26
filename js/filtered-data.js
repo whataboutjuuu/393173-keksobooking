@@ -19,10 +19,9 @@
 
     if (evtFilter.id === 'housing-price') {
       commonItemsArray = commonItemsArray.filter(function (element) {
-        var elementPrice = element.offer.price;
-        if (elementPrice > 50000) {
+        if (element.offer.price > 50000) {
           var elementRange = 'high';
-        } else if (elementPrice < 10000) {
+        } else if (element.offer.price < 10000) {
           elementRange = 'low';
         } else {
           elementRange = 'middle';

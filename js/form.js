@@ -5,10 +5,46 @@
   var form = notice.querySelector('.notice__form');
   var fields = form.querySelectorAll('input[required]');
   var resetButton = form.querySelector('button[type="reset"]');
+  var inputAvatar = form.querySelector('#avatar');
+  var previewAvatar = form.querySelector('.notice__preview').querySelector('img');
+  var inputPhoto = form.querySelector('#images');
+  var previewPhoto = form.querySelector('.form__photo-container');
+
+  // создание контейнера для фотографий
+  var container = document.createElement('div');
+  container.style.outline = '1px dashed #c7c7c7';
+  container.style.width = '480px';
+  container.style.height = '140px';
+  container.style.marginTop = '20px';
+  container.classList.add('drop-container');
+  previewPhoto.appendChild(container);
+
+  var showAvatar = function (result) {
+    previewAvatar.src = result;
+  };
+  var showPhotos = function (result) {
+    var adImage = document.createElement('img');
+    adImage.width = 65;
+    adImage.height = 65;
+    adImage.style.border = '2px solid #f0f0ea';
+    adImage.src = result;
+    adImage.draggable = true;
+    container.appendChild(adImage);
+    window.sortable();
+  };
+
+  // реализация превью загруженной аватары
+  window.file.upload(inputAvatar, showAvatar);
+  // загрузка фотографий квартиры
+  window.file.upload(inputPhoto, showPhotos);
 
   // установка неактивности страницы при нажатии на reset
   resetButton.addEventListener('click', function (evt) {
     evt.preventDefault();
+
+    var images = previewPhoto.querySelectorAll('img');
+    window.file.remove(previewAvatar);
+    window.file.remove(images);
     window.pageActive = false;
     window.setPageState('disabled');
   });
@@ -97,9 +133,13 @@
   });
 
   var onSuccess = function () {
+    var images = previewPhoto.querySelectorAll('img');
+    window.file.remove(previewAvatar);
+    window.file.remove(images);
     window.setPageState('disabled');
     window.pageActive = false;
   };
+
   form.addEventListener('submit', function (evt) {
     window.backend.save(new FormData(form), onSuccess, window.errorAlert);
     evt.preventDefault();
