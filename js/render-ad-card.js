@@ -63,7 +63,11 @@
       }
       picturesList.replaceChild(fragmentPictures, pictureItemTemplate);
     };
-    picturesRender();
+    if (ad.offer.photos.length > 0) {
+      picturesRender();
+    } else {
+      picturesList.remove();
+    }
 
     // вывод аватара автора объявления
     adCard.querySelector('.popup__avatar').src = ad.author.avatar;

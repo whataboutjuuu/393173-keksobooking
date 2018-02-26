@@ -10,6 +10,4 @@
     }
   };
 
-  window.disableFildset(true);
-
 })();
