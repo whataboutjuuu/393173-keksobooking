@@ -1,6 +1,8 @@
 'use strict';
 (function () {
 
+  var CODE_ESC = 27;
+
   var map = document.querySelector('.map');
 
   // составление карточки похожего объявления
@@ -12,7 +14,7 @@
   };
   // закрытие карточки по esc
   var onCardEscPress = function (evt) {
-    if (evt.keyCode === 27) {
+    if (evt.keyCode === CODE_ESC) {
       closePopup();
     }
   };
