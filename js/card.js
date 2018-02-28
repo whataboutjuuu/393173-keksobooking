@@ -5,6 +5,7 @@
 
   var map = document.querySelector('.map');
 
+
   // составление карточки похожего объявления
   var buildAdCard = function (i, loadedData) {
     var fragmentOffer = document.createDocumentFragment();
@@ -46,6 +47,7 @@
     },
     // функция для удаления из дерева выбранных ранее карточек
     destroy: function () {
+      document.removeEventListener('keydown', onCardEscPress);
       var oldCards = map.querySelectorAll('.popup');
       for (var i = 0; i < oldCards.length; i++) {
         map.removeChild(oldCards[i]);
