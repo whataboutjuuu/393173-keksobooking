@@ -14,12 +14,12 @@
   var filterRooms = form.querySelector('#housing-rooms');
   var filterGuests = form.querySelector('#housing-guests');
   var filterFeatures = form.querySelectorAll('input[type="checkbox"]');
-
-
   var Edges = {
     MIN: 150,
     MAX: 500
   };
+
+
 
   var onSuccess = function (response) {
     // при успешной загрузке данных активируется карта и ожидается взаимодействие с пользователем
@@ -66,25 +66,7 @@
           window.pageActive = true;
 
 
-          // создание списка фильтров
-          var checkFeatures = function () {
-            // var checkedFeatures = [];
-            for (var i = 0; i < filterFeatures.length; i++) {
-              // var a = loadedData[i].offer.features;
-              console.log(loadedData[i].offer.features, filterFeatures[i].value);
-              if (filterFeatures[i].checked && !loadedData[i].offer.features.includes(filterFeatures[i].value)) {
-                console.log('checked and loaded data does not includes');
-                return true;
-              }
-            }
-            return false;
-            // console.log(checkedFeatures);
-            // var featuresIncluded = function (element) {
-            //   return checkedFeatures.every(function (item) {
-            //     return element.includes(item);
-            //   });
-            // };
-          };
+           // создание списка фильтров
 
           var filterTypeFunction = function (element) {
             return filterType.options[filterType.selectedIndex].value === 'any' || filterType.options[filterType.selectedIndex].value === String(element.offer.type);
@@ -105,10 +87,15 @@
           var filterGuestsFunction = function (element) {
             return filterGuests.options[filterGuests.selectedIndex].value === 'any' || filterGuests.options[filterGuests.selectedIndex].value === String(element.offer.guests);
           };
-
           var filterFeaturesFunction = function (element) {
-            // return featuresIncluded(element);
-            checkFeatures(element);
+            var checkedFeatures = Array.prototype.slice.call(filterFeatures);
+            for (var i = 0; i < checkedFeatures.length; i++) {
+              if (checkedFeatures[i].checked) {
+                var checkedFeatureValue = checkedFeatures[i].value;
+              }
+            }
+
+            return element.offer.features.indexOf(checkedFeatureValue) !== -1;
           };
 
           var filterList = function (element) {
@@ -116,11 +103,10 @@
 
             return list;
           };
+
           // функция перерисовки пинов согласно отфильтрованным данным
           var build = function () {
-            console.log(resultArray);
             var filteredData = resultArray.filter(filterList);
-            console.log(filteredData);
             window.debounce(function () {
               window.buttons.remove();
               window.buttons.build(filteredData);
@@ -128,33 +114,12 @@
             }, DEBOUNCE_INTERVAL);
 
           };
-          // var filteredData = function () {
-          //   // var filteredArray = array.slice(0);
-          //   // filteredArray = filteredArray.filter(function (element) {
-          //   //   return filterType.options[filterType.selectedIndex].value === 'any' || filterType.options[filterType.selectedIndex].value === String(element.offer.type);
-          //   // }).filter(function (element) {
-          //   //   return filterRooms.options[filterRooms.selectedIndex].value === 'any' || filterRooms.options[filterRooms.selectedIndex].value === String(element.offer.rooms);
-          //   // }).filter(function (element) {
-          //   //   return filterGuests.options[filterGuests.selectedIndex].value === 'any' || filterGuests.options[filterGuests.selectedIndex].value === String(element.offer.guests);
-          //   // });
-          //   var filteredArray = filteredArray.filter(filterList);
 
-          //   return filteredArray;
-          // };
-
-
-
-          form.addEventListener('change', function (evtFilter) {
+          form.addEventListener('change', function () {
             if (map.querySelector('.popup')) {
               map.querySelector('.popup').remove();
             }
-            // RESULT ARRAY
-            // resultArray = window.getFilteredData(evtFilter.target, resultArray);
-            // resultArray = filteredData(resultArray);
-            // console.log(resultArray);
-            // filterFeaturesFunction();
-            // console.log(filterFeaturesFunction());
-            checkFeatures();
+
             build();
 
           });
