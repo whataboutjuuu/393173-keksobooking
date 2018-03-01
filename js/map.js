@@ -8,6 +8,7 @@
   var map = document.querySelector('.map');
   var mainPin = map.querySelector('.map__pin--main');
   var form = map.querySelector('.map__filters');
+
   var Edges = {
     MIN: 150,
     MAX: 500
@@ -52,22 +53,27 @@
         upEvt.preventDefault();
 
         var loadedData = response;
-        var resultArray = response;
         if (!window.pageActive) {
           window.setPageState('enabled', loadedData);
           window.pageActive = true;
-          // перерисовка пинов согласно отфильтрованным данным
-          form.addEventListener('change', function (evtFilter) {
+
+          // функция перерисовки пинов по отфильтрованным данным
+          var buildFilteredButtons = function () {
+            var filteredData = loadedData.filter(window.getfilterList);
+            window.debounce(function () {
+              window.buttons.remove();
+              window.buttons.build(filteredData);
+              window.card.open(filteredData);
+            }, DEBOUNCE_INTERVAL);
+          };
+
+          form.addEventListener('change', function () {
             if (map.querySelector('.popup')) {
               map.querySelector('.popup').remove();
             }
-            resultArray = window.getFilteredData(evtFilter.target, resultArray);
-            window.debounce(function () {
-              window.buttons.remove();
-              window.buttons.build(resultArray);
-              window.card.open(resultArray);
-            }, DEBOUNCE_INTERVAL);
+            buildFilteredButtons();
           });
+
         }
 
         document.removeEventListener('mousemove', onMouseMove);

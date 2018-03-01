@@ -1,7 +1,10 @@
 'use strict';
 (function () {
 
+  var CODE_ESC = 27;
+
   var map = document.querySelector('.map');
+
 
   // составление карточки похожего объявления
   var buildAdCard = function (i, loadedData) {
@@ -12,7 +15,7 @@
   };
   // закрытие карточки по esc
   var onCardEscPress = function (evt) {
-    if (evt.keyCode === 27) {
+    if (evt.keyCode === CODE_ESC) {
       closePopup();
     }
   };
@@ -44,6 +47,7 @@
     },
     // функция для удаления из дерева выбранных ранее карточек
     destroy: function () {
+      document.removeEventListener('keydown', onCardEscPress);
       var oldCards = map.querySelectorAll('.popup');
       for (var i = 0; i < oldCards.length; i++) {
         map.removeChild(oldCards[i]);
