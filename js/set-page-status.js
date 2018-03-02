@@ -12,7 +12,7 @@
   // установка статуса страницы - активный / неактивный
   window.setPageState = function (state, loadedData) {
     if (state === 'disabled') {
-      window.card.destroy();
+      window.card.close();
       window.buttons.remove();
       form.reset();
       window.mainPin.setCoordsStyle(InitialCoords.X, InitialCoords.Y);

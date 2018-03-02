@@ -4,26 +4,32 @@
   var CODE_ESC = 27;
 
   var map = document.querySelector('.map');
-
+  var mapFilters = map.querySelector('.map__filters-container');
 
   // составление карточки похожего объявления
   var buildAdCard = function (i, loadedData) {
     var fragmentOffer = document.createDocumentFragment();
-    var mapFilters = map.querySelector('.map__filters-container');
-    fragmentOffer.appendChild(window.renderAdCard(loadedData[i]));
+    var buildedCard = window.renderAdCard(loadedData[i]);
+    fragmentOffer.appendChild(buildedCard);
     map.insertBefore(fragmentOffer, mapFilters);
-  };
-  // закрытие карточки по esc
-  var onCardEscPress = function (evt) {
-    if (evt.keyCode === CODE_ESC) {
-      closePopup();
-    }
-  };
-  // функция закрытия открытой карточки
-  var closePopup = function () {
-    var card = map.querySelector('.map__card');
-    card.remove();
-    document.removeEventListener('keydown', onCardEscPress);
+
+    // функция закрытия открытой карточки
+    var closePopup = function (card) {
+      card.remove();
+      document.removeEventListener('keydown', onCardEscPress);
+    };
+    // закрытие карточки по esc
+    var onCardEscPress = function (evt) {
+      if (evt.keyCode === CODE_ESC) {
+        closePopup(buildedCard);
+      }
+    };
+    // реализация закрытия карточки
+    var popupClose = buildedCard.querySelector('.popup__close');
+    popupClose.addEventListener('click', function () {
+      closePopup(buildedCard);
+    });
+    document.addEventListener('keydown', onCardEscPress);
   };
 
   window.card = {
@@ -33,24 +39,17 @@
       for (var i = 0; i < pins.length; i++) {
         pins[i].number = i;
         pins[i].addEventListener('click', function (evt) {
-          window.card.destroy();
+          // удаление предыдущей открытой карточки
+          window.card.close();
           var index = evt.currentTarget.number;
           buildAdCard(index, loadedData);
-          // закрытие открытой карточки
-          var popupClose = map.querySelector('.popup__close');
-          popupClose.addEventListener('click', function () {
-            closePopup();
-          });
-          document.addEventListener('keydown', onCardEscPress);
         });
       }
     },
-    // функция для удаления из дерева выбранных ранее карточек
-    destroy: function () {
-      document.removeEventListener('keydown', onCardEscPress);
-      var oldCards = map.querySelectorAll('.popup');
-      for (var i = 0; i < oldCards.length; i++) {
-        map.removeChild(oldCards[i]);
+    close: function () {
+      var popup = map.querySelector('.popup');
+      if (popup) {
+        popup.remove();
       }
     }
   };
